@@ -1,0 +1,67 @@
+/* Center the "Sign Up" heading */
+h1 {
+    text-align: center;
+}
+
+
+input[type="text"] {
+    display: inline-block;
+    width: 45%;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+input[type="text"]:last-child {
+    margin-right: 0;
+}
+
+/* Uniform padding and spacing, rounded corners for all boxes */
+input[type="tel"],
+input[type="email"],
+input[type="password"],
+input[type="checkbox"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* Display "Password" and "Confirm Password" in the same row */
+input[type="password"] {
+    display: inline-block;
+    width: 45%;
+    margin-right: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+input[type="password"]:last-child {
+    margin-right: 0;
+}
+
+/* Blue "Register" button with white text */
+input[value="Register"] {
+    background-color: blue;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Green "Sign In" button with white text */
+input[value="Sign In"] {
+    background-color: green;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
