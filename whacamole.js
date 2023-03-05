@@ -116,7 +116,8 @@ const Controller = ((view, model) => {
                 randomIndex = Math.floor(Math.random() * blockElements.length);
             }
             moles.add(randomIndex);
-            blockElements[randomIndex].style.backgroundImage = "url('./images/mole.jpeg')";
+            const moleElement = blockElements[randomIndex];
+            moleElement.style.backgroundImage = "url('./images/mole.jpeg')";
         }
     }
 
