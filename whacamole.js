@@ -98,7 +98,7 @@ const Controller = ((view, model) => {
 
     let { gameBoard, scoreValue, timerValue, startButton, blockElements } = view
 
-    let { StateMole, StateSnake, score, timer, disappearId, intervalIdMole, intervalIdTimer } = model
+    let { StateMole, StateSnake, score, timer, disappearId, intervalIdMole, intervalIdTimer, snakeId } = model
 
     let moles = new StateMole();
     let killersnake = new StateSnake();
@@ -118,6 +118,7 @@ const Controller = ((view, model) => {
         clearInterval(intervalIdMole);
         clearInterval(intervalIdTimer);
         clearInterval(disappearId);
+        clearInterval(snakeId);
 
         // clearing out any list of moles we have obtained 
         moles.moleList = []
@@ -135,6 +136,7 @@ const Controller = ((view, model) => {
             clearInterval(intervalIdMole);
             clearInterval(intervalIdTimer);
             clearInterval(disappearId);
+            clearInterval(snakeId);
             alert('Time is Over! Your got a score of ' + score + '!');
         }
     }
