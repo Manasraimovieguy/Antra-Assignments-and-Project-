@@ -4,7 +4,7 @@
 const Model = (() => {
     let score = 0
     let timer = 20
-    let intervalIdMole, disappearId, intervalIdTimer;
+    let intervalIdMole, disappearId, intervalIdTimer, snakeId;
 
     class StateMole {
         constructor() {
@@ -32,13 +32,44 @@ const Model = (() => {
         }
     }
 
+    class StateSnake {
+        constructor() {
+            this._snakeList = []
+        }
+
+        get snakeList() {
+            return this._snakeList
+        }
+
+        set snakeList(newList) {
+            this._snakeList = newList
+        }
+
+        adds(index) {
+            this._snakeList.push(index)
+        }
+
+        removes(index) {
+            this._snakeList = this._snakeList.filter(item => item !== index)
+        }
+
+        includes(index) {
+            return this._snakeList.includes(index)
+        }
+
+
+
+    }
+
     return {
         StateMole,
+        StateSnake,
         score,
         timer,
         disappearId,
         intervalIdMole,
-        intervalIdTimer
+        intervalIdTimer,
+        snakeId
     }
 
 
@@ -67,9 +98,10 @@ const Controller = ((view, model) => {
 
     let { gameBoard, scoreValue, timerValue, startButton, blockElements } = view
 
-    let { StateMole, score, timer, disappearId, intervalIdMole, intervalIdTimer } = model
+    let { StateMole, StateSnake, score, timer, disappearId, intervalIdMole, intervalIdTimer } = model
 
     let moles = new StateMole();
+    let killersnake = new StateSnake();
 
 
     //resetting game to initial state
@@ -149,6 +181,60 @@ const Controller = ((view, model) => {
         }
     }
 
+    const createkillerSnake = () => {
+        if (killersnake.snakeList.length < 1) {
+            let randomIndex = Math.floor(Math.random() * blockElements.length);
+            while (killersnake.includes(randomIndex)) {
+                randomIndex = Math.floor(Math.random() * blockElements.length);
+            }
+
+            // if index generated is the same as one of the moles, we need to remove the mole
+            if (moles.includes(randomIndex)) {
+                moles.remove(randomIndex);
+            }
+
+            killersnake.adds(randomIndex);
+            blockElements[randomIndex].style.backgroundImage = "url('./images/mine.jpeg')";
+        }
+
+
+        if (killersnake.snakeList.length === 1) {
+            //generate another random position for snake to go to
+            let randomIndex = Math.floor(Math.random() * blockElements.length);
+            blockElements[killersnake.snakeList[0]].style.backgroundImage = "none";
+            killersnake.removes(killersnake.snakeList[0]);
+
+
+            while (killersnake.includes(randomIndex)) {
+                //to generate another random number in the event that it is the same as the last one
+                randomIndex = Math.floor(Math.random() * blockElements.length);
+            }
+
+            if (moles.includes(randomIndex)) {
+                // if we have an index that has a mole already, we remove mole to replace with snake
+                moles.remove(randomIndex);
+                blockElements[randomIndex].style.backgroundImage = "none";
+            }
+            killersnake.adds(randomIndex);
+            blockElements[randomIndex].style.backgroundImage = "url('./images/mine.jpeg')";
+        }
+    }
+
+    const whackkillerSnake = (event) => {
+        const block = event.target;
+        const index = Array.from(gameBoard.children).indexOf(block);
+        if (killersnake.includes(index)) {
+            for (let i = 0; i < blockElements.length; i++) {
+                blockElements[i].style.backgroundImage = "url('./images/mine.jpeg')";
+            }
+            clearInterval(intervalIdMole);
+            clearInterval(intervalIdTimer);
+            clearInterval(snakeId);
+            clearInterval(disappearId);
+        }
+    }
+
+
 
     const startGame = () => {
         resetAll()
@@ -161,9 +247,13 @@ const Controller = ((view, model) => {
 
         // to make mole disappear  every 2 seconds
         disappearId = setInterval(disappearMole, 2000);
+
+        // based on instruction, we generate a snake every 2 seconds
+        snakeId = setInterval(createkillerSnake, 2000);
     }
     startButton.addEventListener('click', startGame);
     gameBoard.addEventListener('click', whackMole);
+    gameBoard.addEventListener('click', whackkillerSnake);
 
 })(View, Model)
 
